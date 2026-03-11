@@ -1,0 +1,30 @@
+# Data (hosted on Zenodo)
+data/
+data.zip
+
+# Manuscript (not tracked)
+manuscript/
+
+# Reference PDFs
+*.pdf
+!assets/*.pdf
+
+# Large generated figures
+experiment/*.png
+experiment/*.svg
+experiment/*.pdf
+
+# Intermediate/auxiliary files
+experiment/corrected_images/
+experiment/original_data/
+experiment/__pycache__/
+experiment/comprehensive_analysis_report.txt
+experiment/mathematical_analysis_report.txt
+experiment/image_correction_statistics.csv
+experiment/sample_data_sheet.xlsx
+experiment/SEM_parameters.txt
+experiment/improved_cv_analysis.py
+
+# System files
+.DS_Store
+**/.DS_Store
