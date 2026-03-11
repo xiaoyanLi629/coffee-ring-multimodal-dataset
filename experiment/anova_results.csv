@@ -1,0 +1,3 @@
+factor,feature_domain,F,p,eta_squared
+Temperature,Texture (contrast),1.113,0.3302,0.0099
+Humidity,Frequency (spectral energy),6.254,0.0023,0.0533
