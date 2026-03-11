@@ -1,0 +1,6 @@
+domain,metric,value
+Morphological (object count),Pearson r,-0.0591
+Morphological (largest area),Pearson r,-0.0933
+Texture (mean across features),Pearson r (mean±SD),-0.1662 ± 0.0099
+Frequency (total spectral energy),Pearson r,-0.2548
+Frequency (total spectral energy),R²,0.0649
