@@ -1,6 +1,6 @@
 # A Physically-Grounded Multi-modal Imaging Dataset of Colloidal Coffee Ring Deposits
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18918624.svg)](https://doi.org/10.5281/zenodo.18918624)
+![DOI](https://img.shields.io/badge/DOI-removed%20for%20review-lightgrey)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Journal](https://img.shields.io/badge/Journal-Scientific%20Data-orange)
@@ -31,7 +31,7 @@ Unlike semantically paired multi-modal datasets, the three modalities in this da
 | **Environmental conditions** | 3×3 factorial: temperature (20–29°C) × humidity (35–50%) |
 | **Water compositions** | 5 synthetic samples based on Michigan water quality data |
 | **Computed features** | 91 per image pair (GLCM texture, frequency domain, morphological, SSIM) |
-| **Dataset access** | [Zenodo — DOI: 10.5281/zenodo.18918624](https://doi.org/10.5281/zenodo.18918624) |
+| **Dataset access** | Available upon acceptance |
 
 ### Environmental Conditions (A–I)
 
@@ -80,8 +80,7 @@ chapter_3_data/
 └── README.md                       # This file
 ```
 
-> **Dataset files** (595 MB) are hosted on Zenodo, not in this repository.
-> Download from: https://doi.org/10.5281/zenodo.18918624
+> **Dataset files** (595 MB) will be made available upon acceptance, not in this repository.
 
 ---
 
@@ -178,12 +177,12 @@ features = pd.read_csv(str(data_root / "features" / "comprehensive_computer_visi
 If you use this dataset or code, please cite:
 
 ```bibtex
-@article{li2026coffeering,
+@article{anonymous2026coffeering,
   title   = {A Physically-Grounded Multi-modal Imaging Dataset of Colloidal Coffee Ring Deposits},
-  author  = {Li, Xiaoyan and Jiang, Cuicui and Yang, Rumei and Lahr, Rebecca H.},
+  author  = {[Author information removed for anonymous review]},
   journal = {Scientific Data},
   year    = {2026},
-  doi     = {10.5281/zenodo.18918624}
+  doi     = {[DOI removed for anonymous review]}
 }
 ```
 
@@ -191,20 +190,13 @@ If you use this dataset or code, please cite:
 
 ## Authors
 
-| Name | Affiliation | Role |
-|---|---|---|
-| **Xiaoyan Li** | Tsinghua University | First author, data collection, analysis |
-| **Cuicui Jiang** | Inner Mongolia University, College of Computer Science | Data analysis |
-| **Rumei Yang** | Nanjing Medical University, School of Nursing | Data interpretation |
-| **Rebecca H. Lahr** | Ann Arbor City | Corresponding author, project conception |
-
-📧 Corresponding authors: [xiaoyanli629@tsinghua.edu.cn](mailto:xiaoyanli629@tsinghua.edu.cn) · [rlahr@a2gov.org](mailto:rlahr@a2gov.org)
+*Author information removed for anonymous review.*
 
 ---
 
 ## Acknowledgments
 
-We acknowledge the use of the JEOL 6610LV SEM system for high-resolution imaging and thank the Michigan water quality monitoring program for providing foundational data for the synthetic water sample preparations.
+*Acknowledgments removed for anonymous review.*
 
 ---
 
