@@ -1,0 +1,17 @@
+feature_set,target,method,accuracy
+Original (91 CV),Condition,LDA,0.9466666666666667
+Original (91 CV),Temperature,LDA,0.9422222222222222
+Original (91 CV),Humidity,LDA,0.8577777777777778
+Original (91 CV),Water sample,LDA,0.8533333333333334
+Particle features,Condition,LDA,0.4222222222222222
+Particle features,Temperature,LDA,0.52
+Particle features,Humidity,LDA,0.5155555555555555
+Particle features,Water sample,LDA,0.7733333333333333
+Radial + Spatial,Condition,LDA,0.30666666666666664
+Radial + Spatial,Temperature,LDA,0.4533333333333333
+Radial + Spatial,Humidity,LDA,0.5511111111111111
+Radial + Spatial,Water sample,LDA,0.6844444444444444
+Combined (all),Condition,LDA,0.9244444444444444
+Combined (all),Temperature,LDA,0.9555555555555556
+Combined (all),Humidity,LDA,0.8311111111111111
+Combined (all),Water sample,LDA,0.8711111111111111
