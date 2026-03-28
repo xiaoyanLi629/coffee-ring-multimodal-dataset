@@ -14,9 +14,9 @@ This repository contains the analysis code for a **physically-grounded multi-mod
 Unlike semantically paired multi-modal datasets, the three modalities in this dataset image the **same physical deposit** through fundamentally different measurement principles — grounding cross-modal correspondence in shared physical structure rather than human annotation.
 
 <p align="center">
-  <img src="assets/data_overview.png" width="90%" alt="Multi-modal data overview showing mobile phone, SEM, and EDS images for samples 2-6 under condition B">
+  <img src="assets/data_overview.jpg" width="90%" alt="Multi-modal data overview showing mobile phone, SEM, and EDS elemental maps across conditions A, C, and E">
   <br>
-  <em>Representative data from condition B: Mobile phone images (top), SEM images (middle), and EDS elemental maps — Cl channel (bottom) for five water sample compositions.</em>
+  <em>Representative multi-modal images across three environmental conditions (A, C, E). Rows from top to bottom: mobile phone images, SEM images, and EDS elemental maps for Cl (orange), Ca (blue), and O (green).</em>
 </p>
 
 ---
