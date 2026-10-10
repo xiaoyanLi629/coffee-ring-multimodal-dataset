@@ -3,6 +3,8 @@
 Columns are droplets, rows are modalities. Optical and SEM images come from
 corrected_images; EDS maps are the unmodified instrument exports.
 """
+import numpy as np
+
 import style as S
 
 # ── Parameters ───────────────────────────────────────────────────────────────
@@ -34,6 +36,18 @@ CROPS = {
     ("E", 2): {"optical": (0.2282, 0.1494, 0.2236, 0.1197), "sem": (0.1098, 0.0157, 0.1356, 0.0351), "eds": (0.092, 0.0, 0.1241, 0.0219)},
     ("E", 3): {"optical": (0.2044, 0.154, 0.2114, 0.1465), "sem": (0.1083, 0.0, 0.1409, 0.0), "eds": (0.0926, 0.0, 0.1308, 0.0)},
 }
+# Display-only brightness adjustment (data files are not changed):
+# SEM tiles are histogram-matched to their common average distribution, so
+# every tile has the same grey-level histogram;
+# each EDS map is reduced to its signal intensity, lightly smoothed so sparse
+# counts stay visible at print size, lifted with a gamma, scaled so its mean
+# brightness equals EDS_MEAN, and recoloured with a display colour of similar
+# lightness for every element (the instrument's dark blue for Ca would
+# otherwise look much dimmer than Cl and O).
+EDS_SMOOTH = 0.8                    # Gaussian sigma in EDS pixels (maps are 630 × 472)
+EDS_GAMMA = 0.6
+EDS_MEAN = 0.24                     # target mean brightness of every EDS tile
+EDS_COLORS = {"Cl": "#FFA024", "Ca": "#3FB4FF", "O": "#43D65A"}
 TILE_W, TILE_H = 20.2, 22.4        # mm, portrait tiles
 GAP_X, GAP_Y = 1.0, 1.4            # mm
 LEFT, TOP = 6.0, 5.0               # mm reserved for row / column labels
@@ -47,8 +61,36 @@ def path_for(kind, cond, n, element):
     return S.DATA / "eds" / cond / str(n) / element
 
 
+QUANTILES = np.linspace(0, 1, 257)
+
+
+def sem_reference(images):
+    """Average quantile function of all SEM tiles (the common target histogram)."""
+    return np.mean([np.quantile(im, QUANTILES) for im in images], axis=0)
+
+
+def match_histogram(img, ref):
+    q = np.quantile(img, QUANTILES)
+    q = np.maximum.accumulate(q + np.arange(len(q)) * 1e-9)    # strictly increasing
+    return np.interp(img, q, ref) / 255
+
+
+def brighten_eds(img, element):
+    from matplotlib.colors import to_rgb
+    from scipy.ndimage import gaussian_filter
+    signal = gaussian_filter(img.astype(float).max(axis=2) / 255, EDS_SMOOTH)
+    level = (signal / max(np.percentile(signal, 99.5), 1e-6)).clip(0, 1) ** EDS_GAMMA
+    level = np.clip(level * (EDS_MEAN / max(level.mean(), 1e-6)), 0, 1)
+    return level[..., None] * np.array(to_rgb(EDS_COLORS[element]))
+
+
 def main():
     S.apply()
+    def read(kind, cond, n, rot, element=None):
+        return S.load_image(path_for(kind, cond, n, element), crop=CROPS[(cond, n)][kind],
+                            rotate=rot if kind == "optical" else 0, gray=(kind == "sem"))
+
+    sem_ref = sem_reference([read("sem", c, n, r) for c, n, r in COLUMNS])
     height = TOP + len(ROWS) * TILE_H + (len(ROWS) - 1) * GAP_Y + 1
     fig = S.figure(WIDTH, height)
     for j, (cond, n, rot) in enumerate(COLUMNS):
@@ -56,9 +98,13 @@ def main():
         for i, (label, kind, element) in enumerate(ROWS):
             y = TOP + i * (TILE_H + GAP_Y)
             ax = S.axes_mm(fig, x, y, TILE_W, TILE_H)
-            img = S.load_image(path_for(kind, cond, n, element), crop=CROPS[(cond, n)][kind],
-                               rotate=rot if kind == "optical" else 0, gray=(kind == "sem"))
-            ax.imshow(img, cmap="gray" if kind == "sem" else None, aspect="auto", interpolation="antialiased")
+            img = read(kind, cond, n, rot, element)
+            if kind == "sem":
+                ax.imshow(match_histogram(img, sem_ref), cmap="gray", vmin=0, vmax=1,
+                          aspect="auto", interpolation="antialiased")
+            else:
+                ax.imshow(brighten_eds(img, element.split()[0]) if kind == "eds" else img, aspect="auto",
+                          interpolation="antialiased")
             S.image_axes(ax)
             if i == 0:
                 ax.set_title(f"{cond}, droplet {n}", pad=2, fontweight="bold")
