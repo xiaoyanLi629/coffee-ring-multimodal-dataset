@@ -1,0 +1,48 @@
+== slide 1
+[image] autosampler_slide1.png 563x466
+步进电机/X轴
+步进电机/Z轴
+步进电机/Y轴
+步进电机/E轴
+集样板
+采样器基座
+样品保持器
+样品收集器
+== slide 2
+[image] autosampler_slide2.png 1620x1176
+采样器基座
+集样板
+步进电机X轴
+三维视觉模块
+红外非接触温度传感器（Melexis MLX90614）
+步进电机Z轴
+步进电机E轴
+步进电机Y轴
+样品保持器
+样品收集器
+毫米波液体识别雷达模块（TI IWR6843）
+== slide 3
+[image] autosampler_slide3.png 831x644
+步进电机Z轴
+步进电机E轴
+步进电机Y轴
+样品保持器
+采样器基座
+集样板
+步进电机X轴
+样品收集器
+毫米波液体识别雷达模块（TI IWR6843）
+毫米波液体识别雷达模块（TI IWR6843）
+红外非接触温度传感器（Melexis MLX90614）
+步进电机Z轴 → Z-axis Stepper Motor  步进电机E轴 → E-axis Stepper Motor  步进电机X轴 → X-axis Stepper Motor  步进电机Y轴 → Y-axis Stepper Motor  样品收集器 → Sample Collector  样品保持器 → Sample Holder  毫米波液体识别雷达模块(TI IWR6843) → Millimeter-wave Liquid Identification Radar Module (TI IWR6843)  红外非接触温度传感器(Melexis MLX90614) → Non-contact Infrared Temperature Sensor (Melexis MLX90614)  集样板 → Sample Collection Plate  采样器基座 → Sampler Base
+== slide 4
+[image] same picture as slide 3
+Z-axis Stepper Motor
+E-axis Stepper Motor
+Y-axis Stepper Motor
+Sample Holder
+Sampler Base
+Sample Collection Plate
+X-axis Stepper Motor
+Sample Collector
+Non-contact Infrared Temperature Sensor
