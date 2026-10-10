@@ -28,3 +28,4 @@ experiment/improved_cv_analysis.py
 # System files
 .DS_Store
 **/.DS_Store
+__pycache__/
