@@ -2,7 +2,7 @@
 """
 Comprehensive Statistical Analysis of Multi-modal Environmental Water Sample Dataset
 This script analyzes the correlation between environmental conditions and water sample characteristics
-using both normal cell phone images and SEM images.
+using both optical microscope images and SEM images.
 """
 
 import os

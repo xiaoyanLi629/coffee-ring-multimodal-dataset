@@ -14,9 +14,9 @@ This repository contains the analysis code for a **physically-grounded multi-mod
 Unlike semantically paired multi-modal datasets, the three modalities in this dataset image the **same physical deposit** through fundamentally different measurement principles — grounding cross-modal correspondence in shared physical structure rather than human annotation.
 
 <p align="center">
-  <img src="assets/data_overview.jpg" width="90%" alt="Multi-modal data overview showing mobile phone, SEM, and EDS elemental maps across conditions A, C, and E">
+  <img src="assets/data_overview.jpg" width="90%" alt="Multi-modal data overview showing optical microscope, SEM, and EDS elemental maps across conditions A, C, and E">
   <br>
-  <em>Representative multi-modal images across three environmental conditions (A, C, E). Rows from top to bottom: mobile phone images, SEM images, and EDS elemental maps for Cl (orange), Ca (blue), and O (green).</em>
+  <em>Representative multi-modal images across three environmental conditions (A, C, E). Rows from top to bottom: optical microscope images, SEM images, and EDS elemental maps for Cl (orange), Ca (blue), and O (green).</em>
 </p>
 
 ---
@@ -25,8 +25,8 @@ Unlike semantically paired multi-modal datasets, the three modalities in this da
 
 | Property | Details |
 |---|---|
-| **Modalities** | Mobile phone imaging · Scanning Electron Microscopy (SEM) · Energy-Dispersive X-ray Spectroscopy (EDS) |
-| **Total images** | 2,475 (225 phone + 225 SEM + 1,575 EDS + 450 corrected) |
+| **Modalities** | Digital optical microscopy (Celestron 5 MP, 100×) · Scanning Electron Microscopy (SEM) · Energy-Dispersive X-ray Spectroscopy (EDS) |
+| **Total images** | 2,475 (225 optical + 225 SEM + 1,575 EDS + 450 corrected) |
 | **Sample sets** | 225 (5 water compositions × 5 replicates × 9 conditions) |
 | **Environmental conditions** | 3×3 factorial: temperature (20–29°C) × humidity (35–50%) |
 | **Water compositions** | 5 synthetic samples based on Michigan water quality data |
@@ -57,7 +57,7 @@ Unlike semantically paired multi-modal datasets, the three modalities in this da
   <em>Cross-modal validation: (a) SSIM heatmap across environmental conditions, (b) feature interaction surface, (c) 3D feature density distribution, (d) per-condition SSIM distributions.</em>
 </p>
 
-Cross-modal correspondence is empirically verifiable: morphological features show r = 0.659 correlation between mobile phone and SEM images, demonstrating that the modalities capture physically linked information from the same deposit.
+Cross-modal correspondence is empirically verifiable: morphological features show r = 0.659 correlation between optical and SEM images, demonstrating that the modalities capture physically linked information from the same deposit.
 
 ---
 
@@ -88,11 +88,11 @@ chapter_3_data/
 
 ```
 data/
-├── optical/A–I/        # Mobile phone images (JPEG, 1280×1024, 225 total)
+├── optical/A–I/        # Optical microscope images (JPEG, 1280×1024, 225 total)
 ├── sem/A–I/            # SEM images (JPEG, 2560×1920, 225 total)
 │                       # + SEM instrument metadata (TXT, 225 total)
 ├── eds/A–I/            # EDS elemental maps (PNG, 630×472, 7 elements/sample, 1575 total)
-├── corrected_images/A–I/  # Preprocessed phone + SEM images (450 total)
+├── corrected_images/A–I/  # Preprocessed optical + SEM images (450 total)
 ├── features/           # Computer vision features (CSV, 91 features/pair)
 └── metadata/           # Environmental conditions, sample compositions, image stats
 ```
@@ -156,8 +156,8 @@ from pathlib import Path
 
 data_root = Path("path/to/data")
 
-# Load a mobile phone image (condition B, sample 3)
-phone_img = cv2.imread(str(data_root / "optical" / "B" / "Image_3.jpg"))
+# Load an optical microscope image (condition B, sample 3)
+optical_img = cv2.imread(str(data_root / "optical" / "B" / "Image_3.jpg"))
 
 # Load the corresponding SEM image
 sem_img = cv2.imread(str(data_root / "sem" / "B" / "SEM_3.jpg"), cv2.IMREAD_GRAYSCALE)

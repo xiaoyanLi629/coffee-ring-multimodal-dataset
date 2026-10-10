@@ -23,10 +23,10 @@ fig, axes = plt.subplots(3, 5, figsize=(16, 10),
                                       'height_ratios': [1, 1, 0.79]})
 
 labels_col = ['Sample 2', 'Sample 3', 'Sample 4', 'Sample 5', 'Sample 6']
-labels_row = ['Mobile Phone', 'SEM', 'EDS (Cl)']
+labels_row = ['Optical', 'SEM', 'EDS (Cl)']
 
 for col, sid in enumerate(samples):
-    # Mobile phone
+    # Optical microscope
     img = mpimg.imread(str(data_root / 'optical' / cond / f'Image_{sid}.jpg'))
     axes[0, col].imshow(img)
     axes[0, col].set_title(labels_col[col], fontsize=14, fontweight='bold', pad=5)
