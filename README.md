@@ -1,205 +1,101 @@
-# A Physically-Grounded Multi-modal Imaging Dataset of Colloidal Coffee Ring Deposits
+# A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits
 
-![DOI](https://img.shields.io/badge/DOI-removed%20for%20review-lightgrey)
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19271331.svg)](https://doi.org/10.5281/zenodo.19271331)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Journal](https://img.shields.io/badge/Journal-Scientific%20Data-orange)
 
----
+Analysis and figure code for a multi-modal imaging dataset of dried water droplets. Each of the 225 deposits was imaged with three instruments that rely on different physical contrast: digital optical microscopy (reflected visible light), scanning electron microscopy (electron–matter interaction), and energy-dispersive X-ray spectroscopy (characteristic X-ray emission). Because all three observe the same physical deposit, their correspondence comes from shared structure rather than human annotation.
 
-## Overview
-
-This repository contains the analysis code for a **physically-grounded multi-modal imaging dataset** of colloidal coffee ring deposits from environmental water samples.
-
-Unlike semantically paired multi-modal datasets, the three modalities in this dataset image the **same physical deposit** through fundamentally different measurement principles — grounding cross-modal correspondence in shared physical structure rather than human annotation.
+The dataset itself is on Zenodo: <https://doi.org/10.5281/zenodo.19271331> (this DOI always resolves to the latest version).
 
 <p align="center">
-  <img src="assets/data_overview.jpg" width="90%" alt="Multi-modal data overview showing optical microscope, SEM, and EDS elemental maps across conditions A, C, and E">
+  <img src="assets/data_overview.jpg" width="90%" alt="Optical, SEM and EDS images of eight droplets from conditions A, C and E">
   <br>
-  <em>Representative multi-modal images across three environmental conditions (A, C, E). Rows from top to bottom: optical microscope images, SEM images, and EDS elemental maps for Cl (orange), Ca (blue), and O (green).</em>
+  <em>Eight replicate droplets of water Sample 1 from conditions A, C and E. Rows: optical microscope, SEM, and EDS maps of Cl, Ca and O. Brightness is adjusted for display only.</em>
 </p>
 
----
-
-## Dataset Highlights
+## Dataset at a glance
 
 | Property | Details |
 |---|---|
-| **Modalities** | Digital optical microscopy (Celestron 5 MP, 100×) · Scanning Electron Microscopy (SEM) · Energy-Dispersive X-ray Spectroscopy (EDS) |
-| **Total images** | 2,475 (225 optical + 225 SEM + 1,575 EDS + 450 corrected) |
-| **Sample sets** | 225 (5 water compositions × 5 replicates × 9 conditions) |
-| **Environmental conditions** | 3×3 factorial: temperature (20–29°C) × humidity (35–50%) |
-| **Water compositions** | 5 synthetic samples based on Michigan water quality data |
-| **Computed features** | 91 per image pair (GLCM texture, frequency domain, morphological, SSIM) |
-| **Dataset access** | Available upon acceptance |
+| Modalities | Digital optical microscopy (Celestron 5 MP, 100×, 1280×1024) · SEM (JEOL JSM-6610LV, 12 kV, 50×, 2560×1920) · EDS maps of C, Ca, Cl, Mg, Na, O, S (630×472) |
+| Samples | 225 deposits = 5 synthetic water compositions × 5 replicate droplets × 9 environmental conditions |
+| Conditions | 3 × 3 factorial: temperature 20–23, 23–26, 26–29 °C × relative humidity 35–40, 40–45, 45–50 % (A–I) |
+| Water compositions | Five synthetic waters based on Michigan water-quality reports; ionic strength 3.7–12.0 mM |
+| Images | 2,475: 225 optical, 225 SEM, 1,575 EDS, 450 preprocessed optical and SEM |
+| Features | 91 image-level features per pair, 129 features for the multivariate analyses, optical-to-SEM registration of every pair |
 
-### Environmental Conditions (A–I)
+Within each condition directory, files 1–5 belong to water Sample 1, 6–10 to Sample 2, and so on.
 
-| Condition | Temperature (°C) | Humidity (%) |
-|:---------:|:----------------:|:------------:|
-| A | 20–23 | 35–40 |
-| B | 20–23 | 40–45 |
-| C | 20–23 | 45–50 |
-| D | 23–26 | 35–40 |
-| E | 23–26 | 40–45 |
-| F | 23–26 | 45–50 |
-| G | 26–29 | 35–40 |
-| H | 26–29 | 40–45 |
-| I | 26–29 | 45–50 |
-
----
-
-## Cross-modal Validation
+## Cross-modal validation
 
 <p align="center">
-  <img src="assets/analysis2.png" width="85%" alt="SSIM analysis and feature distributions">
+  <img src="assets/analysis2.png" width="85%" alt="Registration and SSIM across conditions">
   <br>
-  <em>Cross-modal validation: (a) SSIM heatmap across environmental conditions, (b) feature interaction surface, (c) 3D feature density distribution, (d) per-condition SSIM distributions.</em>
+  <em>(a) Mean SSIM of registered optical and SEM images per condition. (b) A registered pair: SEM in magenta, optical in green. (c) Crystal-map correlation for the same droplet versus a different droplet. (d) SSIM distribution per condition.</em>
 </p>
 
-Cross-modal correspondence is empirically verifiable: morphological features show r = 0.659 correlation between optical and SEM images, demonstrating that the modalities capture physically linked information from the same deposit.
+The optical images are rotated by about 276° relative to SEM and imaged at a different magnification, so every pair is registered before comparison (`experiment/cross_modal_registration.py`). After registration the crystal features of the two modalities correlate with a median NCC of 0.58 for the same droplet and 0.05 for a different droplet (223 of 225 pairs higher; Wilcoxon p < 10⁻³⁸).
 
----
-
-## Repository Structure
+## Repository
 
 ```
-chapter_3_data/
-├── experiment/                     # Analysis scripts
-│   ├── complete_cv_analysis.py     # Main CV feature extraction pipeline
-│   ├── dataset_statistical_analysis.py  # Statistical analysis
-│   ├── generate_figure3.py         # Figure 3 (SSIM & feature distributions)
-│   ├── generate_heatmaps.py        # Heatmap visualizations
-│   ├── advanced_visualizations.py  # Additional figures
-│   ├── generate_data_overview.py   # Script to generate multi-modal data overview figure
-│   ├── comprehensive_computer_vision_features.csv  # Computed features
-│   ├── run_analysis.sh             # Shell script to run full pipeline
-│   ├── README.md                   # Experiment-level documentation
-│   └── WORKFLOW_GUIDE.md           # Step-by-step workflow guide
-├── assets/                         # Images for this README
-└── README.md                       # This file
+experiment/                 analysis scripts and their CSV outputs
+  cross_modal_registration.py   optical-to-SEM registration and registered SSIM
+  registration_null.py          matched versus mismatched droplet reference
+  complete_cv_analysis.py       image-level feature extraction
+  particle_morphometry.py, spatial_statistics.py, radial_distribution_analysis.py, fractal_dimension.py
+  eds_validation_analysis.py, eds_divergence_analysis.py, multivariate_statistics.py
+figures_src/                code that generates every manuscript figure
+  make_all.py                   python figures_src/make_all.py
+  style.py                      shared style (Arial 7 pt, 180 mm width)
+  fig1_coffee_ring.py … fig4_ssim.py
+  assets/                       the two photographs that cannot be generated
+assets/                     images used in this README
 ```
 
-> **Dataset files** (595 MB) will be made available upon acceptance, not in this repository.
+Scripts expect the dataset unpacked into `data/` at the repository root (`data/optical`, `data/sem`, `data/eds`, `data/corrected_images`, `data/features`, `data/metadata`).
 
----
+## Loading a registered pair
 
-## Dataset Structure (on Zenodo)
+```python
+import cv2, numpy as np, pandas as pd
+from pathlib import Path
 
+root = Path("data")
+def to_width(img, w=640):
+    return cv2.resize(img, (w, round(img.shape[0] * w / img.shape[1])), interpolation=cv2.INTER_AREA)
+
+optical = to_width(cv2.imread(str(root / "corrected_images/B/Image_3.jpg"), cv2.IMREAD_GRAYSCALE))
+sem = to_width(cv2.imread(str(root / "corrected_images/B/SEM_3.jpg"), cv2.IMREAD_GRAYSCALE))
+
+reg = pd.read_csv(root / "features/cross_modal_registration.csv")
+row = reg[(reg.condition == "B") & (reg.image_id == 3)].iloc[0]
+M = np.array([[row.M00, row.M01, row.M02], [row.M10, row.M11, row.M12]])
+optical_in_sem_frame = cv2.warpAffine(optical, M, sem.shape[::-1])
+print("registration NCC", row.registration_ncc)   # treat pairs below 0.3 with caution
 ```
-data/
-├── optical/A–I/        # Optical microscope images (JPEG, 1280×1024, 225 total)
-├── sem/A–I/            # SEM images (JPEG, 2560×1920, 225 total)
-│                       # + SEM instrument metadata (TXT, 225 total)
-├── eds/A–I/            # EDS elemental maps (PNG, 630×472, 7 elements/sample, 1575 total)
-├── corrected_images/A–I/  # Preprocessed optical + SEM images (450 total)
-├── features/           # Computer vision features (CSV, 91 features/pair)
-└── metadata/           # Environmental conditions, sample compositions, image stats
-```
-
----
 
 ## Requirements
 
-```bash
-pip install numpy pandas opencv-python scikit-image scipy matplotlib
-```
-
-| Package | Version | Purpose |
-|---|---|---|
-| `numpy` | ≥1.21 | Array operations |
-| `pandas` | ≥1.3 | Data handling |
-| `opencv-python` | ≥4.5 | Image processing |
-| `scikit-image` | ≥0.18 | SSIM, GLCM features |
-| `scipy` | ≥1.7 | Statistical analysis |
-| `matplotlib` | ≥3.4 | Visualization |
-
----
-
-## Usage
-
-### 1. Run the full analysis pipeline
-
-```bash
-cd experiment/
-bash run_analysis.sh
-```
-
-### 2. Extract computer vision features
-
-```python
-python complete_cv_analysis.py
-# Output: comprehensive_computer_vision_features.csv
-```
-
-### 3. Statistical analysis
-
-```python
-python dataset_statistical_analysis.py
-# Output: statistical reports and heatmap figures
-```
-
-### 4. Generate Figure 3 (SSIM & feature distributions)
-
-```python
-python generate_figure3.py
-# Requires: comprehensive_computer_vision_features.csv
-# Output: analysis2.pdf / analysis2.png
-```
-
-### 5. Load the dataset in Python
-
-```python
-import cv2
-import numpy as np
-from pathlib import Path
-
-data_root = Path("path/to/data")
-
-# Load an optical microscope image (condition B, sample 3)
-optical_img = cv2.imread(str(data_root / "optical" / "B" / "Image_3.jpg"))
-
-# Load the corresponding SEM image
-sem_img = cv2.imread(str(data_root / "sem" / "B" / "SEM_3.jpg"), cv2.IMREAD_GRAYSCALE)
-
-# Load EDS elemental map (Cl channel)
-eds_cl = cv2.imread(str(data_root / "eds" / "B" / "3" / "Cl Kα1.png"), cv2.IMREAD_UNCHANGED)
-
-# Load computed features
-import pandas as pd
-features = pd.read_csv(str(data_root / "features" / "comprehensive_computer_vision_features.csv"))
-```
-
----
+Python 3.10 with numpy, pandas, scipy, scikit-image, scikit-learn, opencv-python, matplotlib, seaborn, statsmodels and Pillow.
 
 ## Citation
 
-If you use this dataset or code, please cite:
-
 ```bibtex
-@article{anonymous2026coffeering,
-  title   = {A Physically-Grounded Multi-modal Imaging Dataset of Colloidal Coffee Ring Deposits},
-  author  = {[Author information removed for anonymous review]},
-  journal = {Scientific Data},
-  year    = {2026},
-  doi     = {[DOI removed for anonymous review]}
+@misc{li2026coffeering,
+  author    = {Li, Xiaoyan and Jiang, Cuicui and Yang, Rumei and Chen, Jiaoping and Lahr, Rebecca},
+  title     = {A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits},
+  publisher = {Zenodo},
+  year      = {2026},
+  doi       = {10.5281/zenodo.19271331}
 }
 ```
 
----
-
 ## Authors
 
-*Author information removed for anonymous review.*
-
----
-
-## Acknowledgments
-
-*Acknowledgments removed for anonymous review.*
-
----
+Xiaoyan Li (Tsinghua University; Michigan State University), Cuicui Jiang (Inner Mongolia University), Rumei Yang (Nanjing Medical University), Jiaoping Chen (University of Baltimore), Rebecca Lahr (Michigan State University, corresponding author).
 
 ## License
 
-The code in this repository is licensed under the [MIT License](https://opensource.org/licenses/MIT). The dataset hosted on Zenodo is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Code: MIT. Dataset on Zenodo: CC BY 4.0.
