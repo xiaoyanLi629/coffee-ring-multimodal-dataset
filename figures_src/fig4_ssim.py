@@ -1,42 +1,54 @@
-"""Figure 4 (analysis2.pdf): SSIM and feature distributions across conditions.
+"""Figure 4 (analysis2.pdf): cross-modal registration and SSIM across conditions.
 
-Calculations are unchanged from experiment/generate_figure3.py; only the
-layout and style follow the shared figure style.
+SSIM values are the registered cross-modal SSIM (experiment/cross_modal_registration.py).
 a  mean cross-modal SSIM per temperature × humidity cell
-b  feature interaction surface    c  3D feature density
+b  example of a registered optical / SEM pair (crystal features overlaid)
+c  crystal-map correlation for matched droplets versus mismatched droplets
 d  per-condition SSIM distributions (ridge plot)
 """
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.interpolate import griddata
 from scipy.stats import gaussian_kde
 
+import sys
+import cv2
+
 import style as S
+
+sys.path.insert(0, str(S.ROOT / "experiment"))
 
 # ── Parameters ───────────────────────────────────────────────────────────────
 WIDTH, HEIGHT = S.FULL_W, 140          # mm
 FEATURES = S.DATA / "features" / "comprehensive_computer_vision_features.csv"
 TEMPS = ["20–23", "23–26", "26–29"]
 HUMIDS = ["35–40", "40–45", "45–50"]
-# The two frequency energies are min–max rescaled for display only, as in the
-# original script: optical to [0.2, 1.4], SEM to [1, 7].
-OPT_RANGE, SEM_RANGE = (0.2, 1.4), (1.0, 7.0)
-VIEW_B, VIEW_C = (28, -55), (22, -48)
+REGISTRATION = S.ROOT / "experiment" / "cross_modal_registration.csv"
+NULL = S.ROOT / "experiment" / "registration_null.csv"
+EXAMPLE = ("E", 2)                     # pair shown in panel b (same deposit as Fig. 2)
+MATCHED_COLOR, SHUFFLED_COLOR = "#2B6CB0", "#A0A7B4"
 
 
-def rescale(v, lo, hi):
-    return (v - v.min()) / (v.max() - v.min()) * (hi - lo) + lo
-
-
-def clean_3d(ax):
-    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-        axis.pane.fill = False
-        axis.pane.set_edgecolor("#dddddd")
-        axis._axinfo["grid"].update(color="#e6e6e6", linewidth=0.3)
-    ax.tick_params(pad=0)
-    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-        axis.set_major_locator(plt.MaxNLocator(4))
+def registered_overlay(cond, i):
+    """SEM (magenta) with the registered optical image (green), cropped to the droplet."""
+    from cross_modal_registration import gray, droplet_mask, stretch, WORK_W
+    reg = pd.read_csv(REGISTRATION)
+    r = reg[(reg.condition == cond) & (reg.image_id == i)].iloc[0]
+    M = np.array([[r.M00, r.M01, r.M02], [r.M10, r.M11, r.M12]])
+    def work(name):
+        g = gray(S.DATA / "corrected_images" / cond / name)
+        f = WORK_W / g.shape[1]
+        return cv2.resize(g, None, fx=f, fy=f, interpolation=cv2.INTER_AREA)
+    sem, opt = work(f"SEM_{i}.jpg"), work(f"Image_{i}.jpg")
+    h, w = sem.shape
+    opt_r = cv2.warpAffine(opt, M, (w, h))
+    m = droplet_mask(sem)
+    ys, xs = np.where(m)
+    pad = 6
+    y0, y1 = max(ys.min() - pad, 0), min(ys.max() + pad, h)
+    x0, x1 = max(xs.min() - pad, 0), min(xs.max() + pad, w)
+    a, b = stretch(sem, m), stretch(opt_r, m)
+    return np.dstack([a, b, a])[y0:y1, x0:x1], r.final_ncc
 
 
 def colorbar(fig, mappable, ax, label=None, offset=0.008):
@@ -55,14 +67,10 @@ def main():
     df["cond"] = df["condition"].str.replace("condition_", "")
     df["temp"] = df["cond"].map(S.CONDITION_TEMP)
     df["hum"] = df["cond"].map(S.CONDITION_RH)
-    nf = rescale(df["normal_freq_total_spectral_energy"].values, *OPT_RANGE)
-    sf = rescale(df["sem_freq_total_spectral_energy"].values, *SEM_RANGE)
-    ss = df["cross_modal_ssim"].values
-
     fig = S.figure(WIDTH, HEIGHT)
     ax_a = S.axes_mm(fig, 18, 6, 58, 52)
-    ax_b = S.axes_mm(fig, 92, 4, 64, 60, projection="3d")
-    ax_c = S.axes_mm(fig, 6, 74, 64, 60, projection="3d")
+    ax_b = S.axes_mm(fig, 104, 6, 52, 52)
+    ax_c = S.axes_mm(fig, 18, 86, 66, 42)
     ax_d = S.axes_mm(fig, 104, 76, 70, 54)
 
     # a: SSIM heatmap
@@ -80,30 +88,27 @@ def main():
     ax_a.invert_yaxis()
     colorbar(fig, im, ax_a, "SSIM")
 
-    # b: interaction surface
-    clean_3d(ax_b)
-    xg, yg = np.meshgrid(np.linspace(nf.min(), nf.max(), 40), np.linspace(ss.min(), ss.max(), 40))
-    zg = griddata((nf, ss), sf, (xg, yg), method="linear")
-    surf = ax_b.plot_surface(xg, yg, zg, cmap=S.CONDITION_CMAP, alpha=0.6, edgecolor="none")
-    ax_b.scatter(nf, ss, sf, c="#D9473B", s=2, alpha=0.6, edgecolors="none")
-    ax_b.set_xlabel("Optical freq. energy", labelpad=-4)
-    ax_b.set_ylabel("SSIM", labelpad=-4)
-    ax_b.set_zlabel("SEM freq. energy", labelpad=-2)
-    ax_b.view_init(*VIEW_B)
-    colorbar(fig, surf, ax_b, offset=0.06)
+    # b: registered example
+    img, ncc_ex = registered_overlay(*EXAMPLE)
+    ax_b.imshow(img, interpolation="antialiased")
+    ax_b.set_axis_off()
+    ax_b.text(0.02, 0.98, "SEM", color="#FF66FF", transform=ax_b.transAxes, ha="left", va="top", fontweight="bold")
+    ax_b.text(0.98, 0.98, "Optical (registered)", color="#66FF66", transform=ax_b.transAxes, ha="right", va="top", fontweight="bold")
+    ax_b.text(0.02, 0.02, f"Condition {EXAMPLE[0]}, droplet {EXAMPLE[1]}  ·  NCC = {ncc_ex:.2f}", color="white",
+              transform=ax_b.transAxes, ha="left", va="bottom")
 
-    # c: density in feature space
-    clean_3d(ax_c)
-    xyz = np.vstack([nf, ss, sf])
-    density = gaussian_kde(xyz, bw_method=0.15)(xyz)
-    dn = (density - density.min()) / (density.max() - density.min())
-    sc = ax_c.scatter(nf, ss, sf, c=density, cmap=S.CONDITION_CMAP, s=3 + dn * 12, alpha=0.8,
-                      edgecolors="#888888", linewidths=0.15)
-    ax_c.set_xlabel("Optical freq. energy", labelpad=-4)
-    ax_c.set_ylabel("SSIM", labelpad=-4)
-    ax_c.set_zlabel("SEM freq. energy", labelpad=-2)
-    ax_c.view_init(*VIEW_C)
-    colorbar(fig, sc, ax_c, "Density", offset=0.06)
+    # c: matched versus mismatched droplets
+    null = pd.read_csv(NULL)
+    bins = np.linspace(-0.3, 1.0, 40)
+    for col, lab, colr in [("shuffled_ncc", "Different droplet", SHUFFLED_COLOR), ("matched_ncc", "Same droplet", MATCHED_COLOR)]:
+        v = null[col].values
+        ax_c.hist(v, bins=bins, color=colr, alpha=0.75, label=f"{lab} (median {np.median(v):.2f})")
+        ax_c.axvline(np.median(v), color=colr, lw=1.0, ls="--")
+    ax_c.set_xlabel("Crystal-map correlation after registration (NCC)")
+    ax_c.set_ylabel("Number of pairs")
+    ax_c.legend(frameon=False, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=2, handlelength=1.2, columnspacing=1.2)
+    for side in ("top", "right"):
+        ax_c.spines[side].set_visible(False)
 
     # d: ridge plot
     cmap = plt.get_cmap(S.CONDITION_CMAP)
@@ -124,8 +129,8 @@ def main():
         ax_d.spines[side].set_visible(False)
     ax_d.tick_params(left=False)
 
-    for ax, k, dx in [(ax_a, "a", -12), (ax_b, "b", 2), (ax_c, "c", 2), (ax_d, "d", -6)]:
-        S.panel_label(ax, k, dx=dx, dy=-3 if ax in (ax_b, ax_c) else 0.5)
+    for ax, k, dx in [(ax_a, "a", -12), (ax_b, "b", -1), (ax_c, "c", -12), (ax_d, "d", -6)]:
+        S.panel_label(ax, k, dx=dx)
     S.save(fig, "analysis2")
 
 
