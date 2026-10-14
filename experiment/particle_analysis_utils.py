@@ -39,11 +39,11 @@ EDS_ELEMENTS = ['C Kα1_2', 'Ca Kα1', 'Cl Kα1', 'Mg Kα1_2', 'Na Kα1_2', 'O K
 EDS_ELEMENT_NAMES = ['C', 'Ca', 'Cl', 'Mg', 'Na', 'O', 'S']
 
 # ── Pixel scale ────────────────────────────────────────────────────────
-# JEOL 6610LV at 50x: 500 μm micron marker.
-# SEM image is 2560×1920 with information bar at bottom (~140 px).
-# Effective imaging area ≈ 2560×1780. The 500 μm bar spans ~250 px.
-# → pixel size ≈ 2.0 μm/px. We use this as default; can be refined.
-PIXEL_SCALE_UM = 2.0  # micrometers per pixel
+# JEOL JSM-6610LV magnification is referenced to a 128 mm x 96 mm image.
+# At 50x the scanned field is 2.56 mm x 1.92 mm, saved as 2560 x 1920 pixels
+# without an information bar, so one pixel is 1.0 um (nominal; SEM
+# magnification is typically accurate to a few per cent).
+PIXEL_SCALE_UM = 1.0  # micrometres per pixel
 
 
 def get_sample_id(image_num):
