@@ -84,7 +84,7 @@ Python 3.10 with numpy, pandas, scipy, scikit-image, scikit-learn, opencv-python
 
 ```bibtex
 @misc{li2026coffeering,
-  author    = {Li, Xiaoyan and Jiang, Cuicui and Yang, Rumei and Chen, Jiaoping and Lahr, Rebecca},
+  author    = {Li, Xiaoyan and Jiang, Cuicui and Lahr, Rebecca},
   title     = {A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits},
   publisher = {Zenodo},
   year      = {2026},
@@ -94,7 +94,7 @@ Python 3.10 with numpy, pandas, scipy, scikit-image, scikit-learn, opencv-python
 
 ## Authors
 
-Xiaoyan Li (Tsinghua University; Michigan State University; lixiaoy5@msu.edu), Cuicui Jiang (Inner Mongolia University), Rumei Yang (Nanjing Medical University), Jiaoping Chen (University of Baltimore), Rebecca Lahr (Michigan State University; corresponding author, rlahr@a2gov.org).
+Xiaoyan Li (Tsinghua University; Michigan State University; lixiaoy5@msu.edu), Cuicui Jiang (Inner Mongolia University), Rebecca Lahr (Michigan State University; corresponding author, rlahr@a2gov.org).
 
 ## License
 
