@@ -26,6 +26,7 @@ HUMIDS = ["35–40", "40–45", "45–50"]
 REGISTRATION = S.ROOT / "experiment" / "cross_modal_registration.csv"
 NULL = S.ROOT / "experiment" / "registration_null.csv"
 EXAMPLE = ("E", 2)                     # pair shown in panel b (same deposit as Fig. 2)
+HIGHPASS_SIGMA = 12                    # px at 640-px working width; removes illumination gradients
 MATCHED_COLOR, SHUFFLED_COLOR = "#2B6CB0", "#A0A7B4"
 
 
@@ -47,7 +48,15 @@ def registered_overlay(cond, i):
     pad = 6
     y0, y1 = max(ys.min() - pad, 0), min(ys.max() + pad, h)
     x0, x1 = max(xs.min() - pad, 0), min(xs.max() + pad, w)
-    a, b = stretch(sem, m), stretch(opt_r, m)
+    def detail(g):
+        """Remove large-scale illumination (Gaussian high-pass) and scale to 0-1 inside the droplet."""
+        hp = g - cv2.GaussianBlur(g, (0, 0), HIGHPASS_SIGMA)
+        lo, hi = np.percentile(hp[m], [2, 99.5])
+        return np.clip((hp - lo) / (hi - lo + 1e-9), 0, 1)
+    a, b = detail(sem), detail(opt_r)
+    outside = ~cv2.dilate(m.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(bool)
+    a[outside] *= 0.35
+    b[outside] *= 0.35
     return np.dstack([a, b, a])[y0:y1, x0:x1], r.final_ncc
 
 
