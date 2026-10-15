@@ -49,7 +49,11 @@ MAGNIFIERS = [
     (631, 1302, 111, 300, 1600, 285),
     (1309, 947, 50, 2160, 1590, 285),
 ]
-SCALE_UM_PER_PX = {"optical": None, "sem": None}   # set to draw scale bars
+# SEM: nominal 1.0 um per pixel (JSM-6610 magnification refers to a 128 mm wide
+# image, so 50x gives a 2.56 mm field over 2560 pixels). The optical microscope
+# has no calibration, so its panels carry no scale bar.
+SCALE_UM_PER_PX = {"optical": None, "sem": 1.0}
+SCALE_BAR_UM = 500
 WORKFLOW = ["Sampling", "Adding liquid", "Water evaporation", "Solid deposition"]
 
 
@@ -62,6 +66,19 @@ def show(ax, img, tag_left=None, tag_right=None, color="white"):
         ax.text(0.03, 0.97, tag_left, ha="left", **kw)
     if tag_right:
         ax.text(0.97, 0.97, tag_right, ha="right", **kw)
+
+
+def scale_bar(ax, um_per_px, length_um=SCALE_BAR_UM, x_frac=0.95, y_frac=0.93):
+    """White bar of length_um in data (pixel) units, right end at x_frac of the width."""
+    if not um_per_px:
+        return
+    (x0, x1), (y0, y1) = ax.get_xlim(), ax.get_ylim()
+    w, h = abs(x1 - x0), abs(y0 - y1)
+    n = length_um / um_per_px
+    xr, y = x0 + x_frac * w, min(y0, y1) + y_frac * h
+    ax.plot([xr - n, xr], [y, y], color="white", lw=1.6, solid_capstyle="butt", zorder=6)
+    ax.text(xr - n / 2, y - 0.025 * h, f"{length_um:g} \u00b5m", color="white", ha="center", va="bottom",
+            fontsize=S.FONT_SIZE - 1, zorder=6)
 
 
 def autosampler(ax):
@@ -189,7 +206,9 @@ def main():
     show(ax_c, S.load_image(OPTICAL_ORIGINAL, crop=OPTICAL_CROP), "Original", "Optical")
     show(ax_d, S.load_image(OPTICAL_ADJUSTED, crop=OPTICAL_CROP), "Adjusted", "Optical")
     show(ax_e, S.load_image(SEM_ORIGINAL, crop=SEM_CROP, gray=True), "Original", "SEM")
+    scale_bar(ax_e, SCALE_UM_PER_PX["sem"])
     sem_with_magnifiers(ax_f, S.load_image(SEM_ADJUSTED, crop=SEM_CROP, gray=True))
+    scale_bar(ax_f, SCALE_UM_PER_PX["sem"], x_frac=0.61)   # between the two lower magnifiers
     ax_f.text(0.015, 0.985, "Adjusted", transform=ax_f.transAxes, color="white", ha="left", va="top")
     ax_f.text(0.985, 0.985, "SEM", transform=ax_f.transAxes, color="white", ha="right", va="top")
 
