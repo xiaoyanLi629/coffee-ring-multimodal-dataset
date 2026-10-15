@@ -171,7 +171,7 @@ If you use the dataset, please cite it:
 
 ```bibtex
 @misc{li2026coffeering,
-  author       = {Li, Xiaoyan and Jiang, Cuicui and Lahr, Rebecca},
+  author       = {Li, Xiaoyan and Jiang, Cuicui and Chen, Jiaoping and Lahr, Rebecca},
   title        = {A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits},
   howpublished = {figshare},
   year         = {2026},
@@ -185,6 +185,7 @@ If you use the code, please also cite the release you used, for example [v1.0.1]
 
 **Xiaoyan Li** — Department of Automation, Tsinghua University; Department of Computational Mathematics, Science and Engineering, Michigan State University · lixiaoy5@msu.edu<br>
 **Cuicui Jiang** — College of Computer Science, Inner Mongolia University<br>
+**Jiaoping Chen** — Merrick School of Business, University of Baltimore<br>
 **Rebecca Lahr** (corresponding author) — Department of Civil and Environmental Engineering, Michigan State University · rlahr@a2gov.org
 
 SEM and EDS data were acquired at the Center for Advanced Microscopy, Michigan State University.
