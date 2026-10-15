@@ -88,22 +88,22 @@ The SEM pixel size follows from the instrument's magnification, which is referen
 
 ```
 data/
-├── optical/<A–I>/Image_<1–25>.jpg          original optical images
-├── sem/<A–I>/SEM_<1–25>.jpg, <1–25>.txt    original SEM images and instrument parameters
-├── eds/<A–I>/<1–25>/<element> Kα1.png      EDS maps, seven per deposit
-├── corrected_images/<A–I>/                 preprocessed Image_<n>.jpg and SEM_<n>.jpg
+├── optical/<A–I>/Image_<n>.jpg           original optical images
+├── sem/<A–I>/SEM_<n>.jpg, <n>.txt        original SEM images, instrument parameters
+├── eds/<A–I>/<n>/<element> Kα1.png       EDS maps, seven per deposit
+├── corrected_images/<A–I>/               preprocessed optical and SEM images
 ├── features/
-│   ├── comprehensive_computer_vision_features.csv   91 image-level features per pair
-│   ├── combined_features_129.csv                    all features used in the multivariate analyses (µm units)
-│   └── cross_modal_registration.csv                 optical-to-SEM affine transform and quality per pair
+│   ├── comprehensive_computer_vision_features.csv    91 image features per pair
+│   ├── combined_features_129.csv                     129 features, µm units
+│   └── cross_modal_registration.csv                  optical-to-SEM transforms
 └── metadata/
-    ├── environmental_conditions.csv     temperature and humidity of conditions A–I
-    ├── sample_compositions.csv          solute concentrations and ionic strength of the five waters
-    ├── image_processing_statistics.csv  brightness and contrast before and after preprocessing
-    └── image_quality_metrics.csv        focus and exposure screen of every original image
+    ├── environmental_conditions.csv      temperature and humidity of A–I
+    ├── sample_compositions.csv           solutes and ionic strength of the waters
+    ├── image_processing_statistics.csv   brightness before and after preprocessing
+    └── image_quality_metrics.csv         focus and exposure of every original image
 ```
 
-Within each condition, deposits 1–5 come from water Sample 1, 6–10 from Sample 2, and so on up to Sample 5.
+Here `<n>` runs from 1 to 25 within each condition: deposits 1–5 come from water Sample 1, 6–10 from Sample 2, and so on up to Sample 5.
 
 ## Cross-modal validation
 
