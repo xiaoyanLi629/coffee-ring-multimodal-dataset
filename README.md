@@ -9,6 +9,12 @@ Analysis and figure code for a multi-modal imaging dataset of dried water drople
 The dataset itself is on figshare: <https://doi.org/10.6084/m9.figshare.34516902>. An earlier version on Zenodo (<https://doi.org/10.5281/zenodo.19271331>) is superseded by the figshare record.
 
 <p align="center">
+  <img src="assets/dataset_tour.gif" width="80%" alt="Animated tour of one deposit: optical image, wipe to the SEM image of the same deposit, registered overlay, EDS element maps, and the same water sample under all nine conditions">
+  <br>
+  <em>One deposit (condition E, water Sample 1) seen by the three instruments: optical image, SEM image of the same deposit, the two after registration (SEM magenta, optical green, white where both show a crystal), EDS maps of Ca, Cl, S and Na, and finally the same water sample under all nine temperature and humidity conditions. Brightness and EDS maps are enhanced for display; regenerate with <code>python figures_src/readme_gif.py</code>.</em>
+</p>
+
+<p align="center">
   <img src="assets/data_overview.jpg" width="90%" alt="Optical, SEM and EDS images of eight droplets from conditions A, C and E">
   <br>
   <em>Eight replicate droplets of water Sample 1 from conditions A, C and E. Rows: optical microscope, SEM, and EDS maps of Cl, Ca and O. Brightness is adjusted for display only.</em>
@@ -50,6 +56,7 @@ figures_src/                code that generates every manuscript figure
   make_all.py                   python figures_src/make_all.py
   style.py                      shared style (Arial 7 pt, 180 mm width)
   fig1_coffee_ring.py … fig4_ssim.py
+  readme_gif.py                 the animated overview in this README
   assets/                       the two photographs that cannot be generated
 assets/                     images used in this README
 ```
