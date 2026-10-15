@@ -1,4 +1,4 @@
-# Data (hosted on Zenodo)
+# Data (hosted on figshare; fetch with download_data.py)
 data/
 data.zip
 
