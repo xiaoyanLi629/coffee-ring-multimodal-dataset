@@ -1,12 +1,12 @@
 # A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19271331.svg)](https://doi.org/10.5281/zenodo.19271331)
+[![DOI](https://img.shields.io/badge/DOI-10.6084%2Fm9.figshare.34516902-blue)](https://doi.org/10.6084/m9.figshare.34516902)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 Analysis and figure code for a multi-modal imaging dataset of dried water droplets. Each of the 225 deposits was imaged with three instruments that rely on different physical contrast: digital optical microscopy (reflected visible light), scanning electron microscopy (electron–matter interaction), and energy-dispersive X-ray spectroscopy (characteristic X-ray emission). Because all three observe the same physical deposit, their correspondence comes from shared structure rather than human annotation.
 
-The dataset itself is on Zenodo: <https://doi.org/10.5281/zenodo.19271331> (this DOI always resolves to the latest version).
+The dataset itself is on figshare: <https://doi.org/10.6084/m9.figshare.34516902>. An earlier version on Zenodo (<https://doi.org/10.5281/zenodo.19271331>) is superseded by the figshare record.
 
 <p align="center">
   <img src="assets/data_overview.jpg" width="90%" alt="Optical, SEM and EDS images of eight droplets from conditions A, C and E">
@@ -86,9 +86,9 @@ Python 3.10 with numpy, pandas, scipy, scikit-image, scikit-learn, opencv-python
 @misc{li2026coffeering,
   author    = {Li, Xiaoyan and Jiang, Cuicui and Lahr, Rebecca},
   title     = {A Physically Grounded Multi-modal Imaging Dataset of Evaporative Coffee Ring Deposits},
-  publisher = {Zenodo},
+  publisher = {figshare},
   year      = {2026},
-  doi       = {10.5281/zenodo.19271331}
+  doi       = {10.6084/m9.figshare.34516902}
 }
 ```
 
@@ -98,4 +98,4 @@ Xiaoyan Li (Tsinghua University; Michigan State University; lixiaoy5@msu.edu), C
 
 ## License
 
-Code: MIT. Dataset on Zenodo: CC BY 4.0.
+Code: MIT. Dataset on figshare: CC BY 4.0.
